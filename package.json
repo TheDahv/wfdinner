@@ -4,7 +4,8 @@
   "description": "What's For Dinner web app v2",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "postinstall": "bower install && gulp build"
   },
   "author": "David Pierce - david.dean.pierce@gmail.com",
   "license": "ISC",

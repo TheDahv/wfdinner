@@ -14,7 +14,13 @@ gulp.task('clean:scripts', function (cb) {
   return del('public/js/**', cb);
 });
 
-gulp.task('move-scripts', ['clean:scripts'], function () {
+gulp.task('clean:styles', function (cb) {
+  return del('public/css/**', cb);
+});
+
+gulp.task('clean', ['clean:scripts', 'clean:styles']);
+
+gulp.task('scripts', ['clean:scripts'], function () {
   // Grab all project JavaScript sources
   return gulp.src([VENDOR_JS, SCRIPTS_SRC])
     // Initialize source maps
@@ -49,10 +55,6 @@ gulp.task('lint', function () {
     .pipe(jshint.reporter(require('jshint-stylish')));
 });
 
-gulp.task('clean:styles', function (cb) {
-  return del('public/css/**', cb);
-});
-
 gulp.task('vendor-styles', function () {
   return gulp.src(VENDOR_CSS)
     .pipe(concat('vendor.css'))
@@ -67,6 +69,8 @@ gulp.task('sass', function () {
     .pipe(gulp.dest('./public/css'));
 });
 
+gulp.task('styles', ['vendor-styles', 'sass']);
+
 gulp.task('watch:scripts', function () {
   return gulp.watch(SCRIPTS_SRC, ['lint', 'move-scripts']);
 });
@@ -76,11 +80,11 @@ gulp.task('watch:sass', function () {
 });
 
 gulp.task('build', [
-  'clean:scripts',
-  'clean:styles',
+  'clean',
   'vendor-styles',
   'sass',
-  'move-scripts'
+  'styles',
+  'scripts'
 ]);
 
 gulp.task('watch', ['build', 'watch:scripts', 'watch:sass'], function () {
