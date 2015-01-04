@@ -56,13 +56,22 @@ wfd.controller('wfd-app', function ($scope, $mdSidenav) {
   $scope.meals = [
     'Breakfast',
     'Lunch',
-    'Dinner'
+    'Dinner',
   ];
+
+  $scope.mealsState = {
+    'Breakfast' : true,
+    'Lunch'     : true,
+    'Dinner'    : true
+  };
 
   $scope.openOptions = function ($event) {
     $mdSidenav('optionswindow').toggle();
-
     $event.preventDefault();
+  };
+
+  $scope.showMeal = function (mealName) {
+    return $scope.mealsState[mealName];
   };
 });
 
@@ -70,6 +79,19 @@ wfd.controller('options-controller', function ($scope, $mdSidenav) {
   $scope.close = function () {
     $mdSidenav('optionswindow').close();
   };
+
+  var handleMealState = function (mealName) {
+    return function (value) {
+      if (angular.isDefined(value)) {
+        $scope.mealsState[mealName] = value;
+      }
+      return $scope.mealsState[mealName];
+    };
+  };
+
+  $scope.showBreakfast = handleMealState('Breakfast');
+  $scope.showLunch     = handleMealState('Lunch');
+  $scope.showDinner    = handleMealState('Dinner');
 });
 
 wfd.controller('meal-controller', function ($scope) {

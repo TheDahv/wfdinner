@@ -34,13 +34,16 @@
     <md-content ng-controller="options-controller" class="md-padding">
       <h2>Meals to Plan</h2>
 
-      <md-checkbox ng-model="showBreakfast" aria-label="Plan Breakfast">
+      <md-checkbox ng-model="showBreakfast"
+        ng-model-options="{ getterSetter: true }" aria-label="Plan Breakfast">
         Breakfast
       </md-checkbox>
-      <md-checkbox ng-model="showLunch" aria-label="Plan Lunch">
+      <md-checkbox ng-model="showLunch"
+        ng-model-options="{ getterSetter: true }" aria-label="Plan Lunch">
         Lunch
       </md-checkbox>
-      <md-checkbox ng-model="showDinner" aria-label="Plan Dinner">
+      <md-checkbox ng-model="showDinner"
+        ng-model-options="{ getterSetter: true }" aria-label="Plan Dinner">
         Dinner
       </md-checkbox>
 
@@ -58,7 +61,8 @@
         <div layout="column" layout-fill layout-align="space-around center"
           class="day">
 
-          <div ng-repeat="meal in meals" class="meal {{meal}}">
+          <div class="meal {{meal}}"
+            ng-repeat="meal in meals | filter:showMeal" >
             <h2>{{meal}}</h2>
 
             <form action="" ng-controller="meal-controller">
