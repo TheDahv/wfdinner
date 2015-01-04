@@ -2,7 +2,7 @@
 
 var wfd = angular.module('wfd', ['ngMaterial']);
 
-wfd.controller('wfd-app', function ($scope) {
+wfd.controller('wfd-app', function ($scope, $mdSidenav) {
   $scope.selectedDay = 'Monday';
   $scope.days = [
     'Monday',
@@ -58,6 +58,18 @@ wfd.controller('wfd-app', function ($scope) {
     'Lunch',
     'Dinner'
   ];
+
+  $scope.openOptions = function ($event) {
+    $mdSidenav('optionswindow').toggle();
+
+    $event.preventDefault();
+  };
+});
+
+wfd.controller('options-controller', function ($scope, $mdSidenav) {
+  $scope.close = function () {
+    $mdSidenav('optionswindow').close();
+  };
 });
 
 wfd.controller('meal-controller', function ($scope) {

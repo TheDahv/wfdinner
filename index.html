@@ -7,22 +7,50 @@
   <script src="/js/vendors.js"></script>
   <script src="/js/application.js"></script>
   <title>What's For Dinner</title>
+
+  <meta name="viewport" content="initial-scale=1, maximum-scale=1">
 </head>
 <body ng-controller="wfd-app">
   <header layout="row" layout-align="start center">
-    <md-toolbar class="md-tall md-accent md-default-theme">
+    <md-toolbar class="md-accent md-default-theme" layout="row">
       <div class="md-toolbar-tools">
-        <h1>What's For Dinner</h1>
+        <h1 flex="90">What's For Dinner</h1>
 
-        <div class="options">
+        <div class="options" flex="10">
           <label for="">
             Options
-            <a href="#options">*</a>
+
+            <a href="#options" class="btn options" ng-click="openOptions($event)"></a>
           </label>
         </div><!-- .options -->
       </div>
     </md-toolbar>
+
   </header>
+  <md-sidenav class="md-sidenav-right md-whiteframe-z2" md-component-id="optionswindow">
+    <md-toolbar class="md-theme-light">
+      <h1 class="md-toolbar-tools">Options</h1>
+    </md-toolbar>
+    <md-content ng-controller="options-controller" class="md-padding">
+      <h2>Meals to Plan</h2>
+
+      <md-checkbox ng-model="showBreakfast" aria-label="Plan Breakfast">
+        Breakfast
+      </md-checkbox>
+      <md-checkbox ng-model="showLunch" aria-label="Plan Lunch">
+        Lunch
+      </md-checkbox>
+      <md-checkbox ng-model="showDinner" aria-label="Plan Dinner">
+        Dinner
+      </md-checkbox>
+
+      <hr class="section-spacer">
+
+      <md-button ng-click="close()" md-class="primary">
+        Close
+      </md-button>
+    </md-content>
+  </md-sidenav>
 
   <div id="main">
     <md-tabs md-selected="currentDay">

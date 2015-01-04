@@ -19,6 +19,10 @@ gulp.task('clean:styles', function (cb) {
   return del('public/css/**', cb);
 });
 
+gulp.task('clean:images', function (cb) {
+  return del('public/img/**', cb);
+});
+
 gulp.task('clean', ['clean:scripts', 'clean:styles']);
 
 var buildScripts = function (scriptsGlob, name)  {
@@ -92,6 +96,11 @@ gulp.task('sass', function () {
 
 gulp.task('styles', ['vendor-styles', 'sass']);
 
+gulp.task('move-images', function () {
+  return gulp.src("_assets/img/**")
+    .pipe(gulp.dest('public/img'));
+});
+
 gulp.task('watch:scripts', function () {
   return gulp.watch(SCRIPTS_SRC, ['lint', 'scripts']);
 });
@@ -100,13 +109,18 @@ gulp.task('watch:sass', function () {
   return gulp.watch(SASS_SRC, ['sass']);
 });
 
+gulp.task('watch:images', function () {
+  return gulp.watch('_assets/img/**', ['move-images']);
+})
+
 gulp.task('build', [
   'clean',
   'styles',
   'scripts',
-  'move-source-maps'
+  'move-source-maps',
+  'move-images'
 ]);
 
-gulp.task('watch', ['build', 'watch:scripts', 'watch:sass'], function () {
+gulp.task('watch', ['build', 'watch:scripts', 'watch:sass', 'watch:images'], function () {
   console.log("Watching your project...");
 });
