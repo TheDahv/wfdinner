@@ -3,12 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <link rel="stylesheet" href="/css/vendor.css">
+  <link rel="stylesheet" href="/css/application.css">
   <script src="/js/vendors.js"></script>
   <script src="/js/application.js"></script>
   <title>What's For Dinner</title>
 </head>
 <body ng-controller="wfd-app">
-  <header layout="row">
+  <header layout="row" layout-align="start center">
     <h1>What's For Dinner</h1>
 
     <div class="options">
@@ -16,11 +17,11 @@
         Options
         <a href="#options">*</a>
       </label>
-    </div>
+    </div><!-- .options -->
   </header>
 
   <div id="main">
-    <h2>{{message}}</h2>
+    
   </div>
 </body>
 </html>

@@ -7,7 +7,7 @@ sourcemaps  = require('gulp-sourcemaps'),
 sass        = require('gulp-sass'),
 // Constants
 SCRIPTS_SRC = '_assets/js/**/*.js',
-SASS_SRC    = '_assets/sass/*.scss',
+SASS_SRC    = '_assets/sass/**/*.scss',
 VENDOR_JS   = 'vendor/**/*.js',
 VENDOR_CSS  = 'vendor/**/*.css';
 

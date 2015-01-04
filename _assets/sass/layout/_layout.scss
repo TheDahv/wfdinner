@@ -1,0 +1,7 @@
+@mixin outer-container {
+  max-width: em(1024);
+  margin: 0 auto;
+}
+.outer-container {
+  @include outer-container;
+}
