@@ -1,6 +1,7 @@
 var gulp    = require('gulp'),
 jshint      = require('gulp-jshint'),
 del         = require('del'),
+es          = require('event-stream'),
 concat      = require('gulp-concat'),
 sourcemaps  = require('gulp-sourcemaps'),
 sass        = require('gulp-sass'),
@@ -20,15 +21,44 @@ gulp.task('clean:styles', function (cb) {
 
 gulp.task('clean', ['clean:scripts', 'clean:styles']);
 
-gulp.task('scripts', ['clean:scripts'], function () {
+var buildScripts = function (scriptsGlob, name)  {
   // Grab all project JavaScript sources
-  return gulp.src([VENDOR_JS, SCRIPTS_SRC])
+  return gulp.src(scriptsGlob)
     // Initialize source maps
     .pipe(sourcemaps.init())
     // Bring everything into one file
-    .pipe(concat('application.js'))
+    .pipe(concat(name))
     // Write the result to javascripts folder
-    .pipe(gulp.dest('public/js/'));
+    .pipe(gulp.dest('public/js'));
+};
+
+gulp.task('scripts:vendor', function () {
+  var angularSources = [
+    "angular", "angular-animate", "angular-aria", "angular-material"
+  ].map(function (module) {
+    return "vendor/" + module + "/" + module + ".min.js";
+  });
+
+  angularSources.unshift('vendor/hammerjs/hammer.min.js');
+
+  return gulp.src(angularSources)
+    .pipe(concat('vendors.js'))
+    .pipe(gulp.dest('public/js'));
+});
+
+gulp.task('scripts:application', function () {
+  return buildScripts(SCRIPTS_SRC, 'application.js');
+});
+
+gulp.task('scripts', ['scripts:vendor', 'scripts:application']);
+
+gulp.task('move-source-maps', function () {
+  return gulp.src('vendor/**/*.map')
+    .pipe(es.map(function (file, cb) {
+      file.path = file.base + file.path.split('/').slice(-1)[0];
+      cb(null, file);
+    }))
+    .pipe(gulp.dest('public/js'));
 });
 
 gulp.task('lint', function () {
@@ -39,17 +69,8 @@ gulp.task('lint', function () {
       "globals": {
         "console": false,
         "document": false,
-        "navigator": false,
-        "requestAnimationFrame": false,
-        "Uint8Array": false,
-        "RTCSessionDescription": false,
-        "RTCIceCandidate": false,
-        "RTCPeerConnection": false,
-        "define": false,
-        "io": false,
-        "Audio": false,
-        "attachMediaStream": false,
-        "AudioContext": false
+        "window": false,
+        "navigator": false
       }
     }))
     .pipe(jshint.reporter(require('jshint-stylish')));
@@ -72,7 +93,7 @@ gulp.task('sass', function () {
 gulp.task('styles', ['vendor-styles', 'sass']);
 
 gulp.task('watch:scripts', function () {
-  return gulp.watch(SCRIPTS_SRC, ['lint', 'move-scripts']);
+  return gulp.watch(SCRIPTS_SRC, ['lint', 'scripts']);
 });
 
 gulp.task('watch:sass', function () {
@@ -81,10 +102,9 @@ gulp.task('watch:sass', function () {
 
 gulp.task('build', [
   'clean',
-  'vendor-styles',
-  'sass',
   'styles',
-  'scripts'
+  'scripts',
+  'move-source-maps'
 ]);
 
 gulp.task('watch', ['build', 'watch:scripts', 'watch:sass'], function () {

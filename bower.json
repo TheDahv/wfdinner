@@ -17,7 +17,8 @@
     "tests"
   ],
   "dependencies": {
-    "angular": "~1.3.8",
-    "angular-material": "~0.6.1"
+    "angular": "1.3.8",
+    "angular-material": "0.6.1",
+    "hammerjs": "2.0.4"
   }
 }
