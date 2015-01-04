@@ -10,18 +10,66 @@
 </head>
 <body ng-controller="wfd-app">
   <header layout="row" layout-align="start center">
-    <h1>What's For Dinner</h1>
+    <md-toolbar class="md-tall md-accent md-default-theme">
+      <div class="md-toolbar-tools">
+        <h1>What's For Dinner</h1>
 
-    <div class="options">
-      <label for="">
-        Options
-        <a href="#options">*</a>
-      </label>
-    </div><!-- .options -->
+        <div class="options">
+          <label for="">
+            Options
+            <a href="#options">*</a>
+          </label>
+        </div><!-- .options -->
+      </div>
+    </md-toolbar>
   </header>
 
   <div id="main">
-    
-  </div>
+    <md-tabs md-selected="currentDay">
+      <md-tab ng-repeat="day in days" label="{{day}}">
+        <div layout="column" layout-fill layout-align="space-around center"
+          class="day">
+
+          <div ng-repeat="meal in meals" class="meal {{meal}}">
+            <h2>{{meal}}</h2>
+
+            <form action="" ng-controller="meal-controller">
+              <p>
+                <md-text-float label="Meal Name"
+                  class="long"
+                  ng-model="mealName"
+                  ng-model-options="{ getterSetter: true }">
+                </md-text-float>
+              </p>
+
+              <p>
+                <md-text-float label="Recipe URL"
+                  class="long"
+                  ng-model="mealUrl"
+                  ng-model-options="{ getterSetter: true }">
+                </md-text-float>
+              </p>
+
+              <p>
+                <label for="{{day}}.{{meal}}.ingredients" class="light">
+                  Ingredients<br>
+                  <textarea type="text" name="{{day}}.{{meal}}.ingredients"
+                    ng-model="mealIngredients"
+                    ng-model-options="{ getterSetter: true }">
+                  </textarea>
+                </label>
+              </p>
+            </form><!-- form | meal-controller -->
+
+            <md-divider ng-if="!$last"></md-divider>
+
+            <hr class="section-spacer">
+
+          </div><!-- ng-repeat="meal in meals" .meal.{{meal}} -->
+
+        </div><!-- .day | day-controller -->
+      </md-tab><!-- ng-repeat="day in days" -->
+    </md-tabs>
+  </div><!-- #main -->
 </body>
 </html>

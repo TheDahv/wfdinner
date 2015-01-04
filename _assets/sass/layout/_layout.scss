@@ -5,3 +5,10 @@
 .outer-container {
   @include outer-container;
 }
+
+hr.section-spacer {
+  height: 0;
+  max-height: 0;
+  border: none;
+  margin-bottom: 2em;
+}
