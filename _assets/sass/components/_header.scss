@@ -1,2 +1,12 @@
 header {
+  .options {
+    text-align: right;
+    padding-right: 24px;
+  }
+}
+
+@media (max-width: 530px) {
+  header .options label {
+    display: none;
+  }
 }
