@@ -2,7 +2,7 @@
 
 var wfd = angular.module('wfd', ['ngMaterial']);
 
-wfd.controller('wfd-app', function ($scope, $mdSidenav) {
+wfd.controller('wfd-app', function ($scope, $http, $mdSidenav) {
   $scope.selectedDay = 'Monday';
   $scope.days = [
     'Monday',
@@ -14,44 +14,16 @@ wfd.controller('wfd-app', function ($scope, $mdSidenav) {
     'Sunday'
   ];
 
-  // Top-level Meal Plan
-  $scope.plan = {
-    'Monday': {
-      'Breakfast' : { name: '', url: '', ingredients: [] },
-      'Lunch'     : { name: '', url: '', ingredients: [] },
-      'Dinner'    : { name: '', url: '', ingredients: [] }
-    },
-    'Tuesday': {
-      'Breakfast' : { name: '', url: '', ingredients: [] },
-      'Lunch'     : { name: '', url: '', ingredients: [] },
-      'Dinner'    : { name: '', url: '', ingredients: [] }
-    },
-    'Wednesday': {
-      'Breakfast' : { name: '', url: '', ingredients: [] },
-      'Lunch'     : { name: '', url: '', ingredients: [] },
-      'Dinner'    : { name: '', url: '', ingredients: [] }
-    },
-    'Thursday': {
-      'Breakfast' : { name: '', url: '', ingredients: [] },
-      'Lunch'     : { name: '', url: '', ingredients: [] },
-      'Dinner'    : { name: '', url: '', ingredients: [] }
-    },
-    'Friday': {
-      'Breakfast' : { name: '', url: '', ingredients: [] },
-      'Lunch'     : { name: '', url: '', ingredients: [] },
-      'Dinner'    : { name: '', url: '', ingredients: [] }
-    },
-    'Saturday': {
-      'Breakfast' : { name: '', url: '', ingredients: [] },
-      'Lunch'     : { name: '', url: '', ingredients: [] },
-      'Dinner'    : { name: '', url: '', ingredients: [] }
-    },
-    'Sunday': {
-      'Breakfast' : { name: '', url: '', ingredients: [] },
-      'Lunch'     : { name: '', url: '', ingredients: [] },
-      'Dinner'    : { name: '', url: '', ingredients: [] }
-    }
-  };
+  var planId = document.location.pathname.slice(1);
+  // Empty plan ID. Send user back to start page
+  if (!planId) {
+    document.location.pathname = "/";
+  }
+
+  // Load Meal Plan
+  $http.get('/plans/' + planId).success(function (plan) {
+    $scope.plan = plan;
+  });
 
   $scope.meals = [
     'Breakfast',
@@ -97,27 +69,35 @@ wfd.controller('options-controller', function ($scope, $mdSidenav) {
 wfd.controller('meal-controller', function ($scope) {
   var makeAccessor = function (path) {
     return function (value) {
-      if (angular.isDefined(value)) {
-        $scope.plan[$scope.day][$scope.meal][path] = value;
+      if ($scope.plan) {
+        if (angular.isDefined(value)) {
+          $scope.plan[$scope.day][$scope.meal][path] = value;
+        }
+        return $scope.plan[$scope.day][$scope.meal][path];
       }
-      return $scope.plan[$scope.day][$scope.meal][path];
+      
+      return '';
     };
   };
 
   $scope.mealName = makeAccessor('name');
   $scope.mealUrl = makeAccessor('url');
   $scope.mealIngredients = function (value) {
-    if (angular.isDefined(value)) {
-      $scope.plan[$scope.day][$scope.meal].ingredients = value
-        // Break input into individual items by line breaks or commas
-        .split(/,|\n|\r\n/)
-        // Clean up any extra whitespace
-        .map(function (ingredient) {
-          return ingredient.trim();
-        });
+    if ($scope.plan) {
+      if (angular.isDefined(value)) {
+        $scope.plan[$scope.day][$scope.meal].ingredients = value
+          // Break input into individual items by line breaks or commas
+          .split(/,|\n|\r\n/)
+          // Clean up any extra whitespace
+          .map(function (ingredient) {
+            return ingredient.trim();
+          });
+      }
+
+      return $scope.plan[$scope.day][$scope.meal].ingredients.join('\n');
     }
 
-    return $scope.plan[$scope.day][$scope.meal].ingredients.join('\n');
+    return '';
   };
 
 });
