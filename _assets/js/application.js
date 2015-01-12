@@ -100,6 +100,8 @@ wfd.controller('meal-controller', function ($scope) {
     return '';
   };
 
+  $scope.syncMealChange = function (path) {
+  };
 });
 
 }(window.angular));
