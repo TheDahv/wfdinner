@@ -1,8 +1,13 @@
 (function (angular) {
 
-var wfd = angular.module('wfd', ['ngMaterial']);
+var wfd = angular.module('wfd', ['ngMaterial', 'btford.socket-io']);
 
-wfd.controller('wfd-app', function ($scope, $http, $mdSidenav) {
+// Socket factory
+wfd.factory('socket', function (socketFactory) { return socketFactory(); });
+
+// Directives
+
+wfd.controller('wfd-app', function ($scope, $http, $mdSidenav, socket) {
   $scope.selectedDay = 'Monday';
   $scope.days = [
     'Monday',
@@ -45,6 +50,22 @@ wfd.controller('wfd-app', function ($scope, $http, $mdSidenav) {
   $scope.showMeal = function (mealName) {
     return $scope.mealsState[mealName];
   };
+
+  socket.on('mealupdate', function (data) {
+    var parts = data.path.split(':'),
+        i = 0,
+        tmp = $scope.plan;
+
+    // Break apart selectors and drill into the plan
+    // until `tmp` is the meal we want to update
+    for (i; i < parts.length - 1; i++) {
+      tmp = tmp[parts[i]];
+    }
+
+    // Use the last part to access the meal property and update it
+    tmp[parts[parts.length - 1]] = data.value;
+  });
+
 });
 
 wfd.controller('options-controller', function ($scope, $mdSidenav) {
@@ -66,7 +87,15 @@ wfd.controller('options-controller', function ($scope, $mdSidenav) {
   $scope.showDinner    = handleMealState('Dinner');
 });
 
-wfd.controller('meal-controller', function ($scope) {
+var syncMealChange = function (socket, id, path, value) {
+  socket.emit('mealchange', {
+    id: id,
+    path: path,
+    value: value
+  });
+};
+
+wfd.controller('meal-controller', function ($scope, socket) {
   var makeAccessor = function (path) {
     return function (value) {
       if ($scope.plan) {
@@ -75,7 +104,7 @@ wfd.controller('meal-controller', function ($scope) {
         }
         return $scope.plan[$scope.day][$scope.meal][path];
       }
-      
+
       return '';
     };
   };
@@ -101,6 +130,8 @@ wfd.controller('meal-controller', function ($scope) {
   };
 
   $scope.syncMealChange = function (path) {
+    var value = $scope["meal" + path[0].toUpperCase() + path.slice(1)]();
+    syncMealChange(socket, $scope._id, [$scope.day, $scope.meal, path].join(':'), value);
   };
 });
 

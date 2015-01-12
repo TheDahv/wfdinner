@@ -40,10 +40,11 @@ gulp.task('scripts:vendor', function () {
   var angularSources = [
     "angular", "angular-animate", "angular-aria", "angular-material"
   ].map(function (module) {
-    return "vendor/" + module + "/" + module + ".min.js";
+    return "vendor/" + module + "/" + module + ".js";
   });
 
   angularSources.unshift('vendor/hammerjs/hammer.min.js');
+  angularSources.push('vendor/angular-socket-io/socket.min.js');
 
   return gulp.src(angularSources)
     .pipe(concat('vendors.js'))

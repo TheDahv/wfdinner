@@ -1,6 +1,9 @@
 var express = require('express'),
-    app = express(),
-    plan = require('./server/data/plan');
+    _     = require('lodash'),
+    app     = express(),
+    sockets = require('socket.io'),
+    io,
+    plan    = require('./server/data/plan');
 
 // Configure server and middleware
 app.use(express.static('./public'));
@@ -48,4 +51,24 @@ var server = app.listen(port, function () {
   console.log("Server listening at http://%s:%s",
     server.address().address,
     server.address().port);
+});
+
+// socket setup
+io = sockets(server);
+io.on('connection', function (socket) {
+  socket.on('mealchange', function (data) {
+    var result = plan.update(data.id, data.path.replace(/:/g, '.'), data.value);
+    result.done(
+      // success
+      function () {
+        // Send back to all listeners
+        socket.emit('mealupdate', data);
+      },
+      // fail
+      function (err) {
+        console.log("Update error: ", err);
+        socket.emit('err:update', _.extend(data, { err: err }));
+      }
+    );
+  });
 });
