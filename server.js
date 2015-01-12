@@ -56,13 +56,19 @@ var server = app.listen(port, function () {
 // socket setup
 io = sockets(server);
 io.on('connection', function (socket) {
+  // Assign this socket to a room
+  socket.on('room:join', function (roomId) {
+    console.log("Connection trying to join room", roomId);
+    socket.join(roomId);
+  });
+
   socket.on('mealchange', function (data) {
     var result = plan.update(data.id, data.path.replace(/:/g, '.'), data.value);
     result.done(
       // success
       function () {
         // Send back to all listeners
-        socket.emit('mealupdate', data);
+        io.to(data.id).emit('mealupdate', data);
       },
       // fail
       function (err) {

@@ -1,9 +1,20 @@
-(function (angular) {
+(function (angular, io) {
 
 var wfd = angular.module('wfd', ['ngMaterial', 'btford.socket-io']);
 
+var getRoom = function () {
+  return document.location.pathname.slice(1);
+};
+
 // Socket factory
-wfd.factory('socket', function (socketFactory) { return socketFactory(); });
+wfd.factory('socket', function (socketFactory) {
+  var socket = io.connect('/');
+  socket.emit('room:join', getRoom());
+
+  return socketFactory({
+    ioSocket: socket
+  });
+});
 
 // Directives
 
@@ -131,8 +142,8 @@ wfd.controller('meal-controller', function ($scope, socket) {
 
   $scope.syncMealChange = function (path) {
     var value = $scope["meal" + path[0].toUpperCase() + path.slice(1)]();
-    syncMealChange(socket, $scope._id, [$scope.day, $scope.meal, path].join(':'), value);
+    syncMealChange(socket, getRoom(), [$scope.day, $scope.meal, path].join(':'), value);
   };
 });
 
-}(window.angular));
+}(window.angular, window.io));
