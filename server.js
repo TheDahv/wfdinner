@@ -89,7 +89,6 @@ io.on('connection', function (socket) {
     result.done(
       // success
       function () {
-        console.log("Ingredients update done");
         // Send back to all listeners
         io.to(data.id).emit('ingredientsupdate', data);
       },

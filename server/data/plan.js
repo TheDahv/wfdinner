@@ -119,10 +119,6 @@ exports.update = function (id, path, value, action) {
     }
 
     if (action && _.isArray(value)) {
-      console.log("Data update");
-      console.log(action);
-      console.log(value);
-
       // $push or $pull array values
       if (action === 'add') {
         value.forEach(function (item) {
