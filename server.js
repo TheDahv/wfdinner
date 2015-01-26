@@ -77,4 +77,27 @@ io.on('connection', function (socket) {
       }
     );
   });
+
+  socket.on('ingredientschange', function (data) {
+    var result = plan.update(
+      data.id,
+      data.path.replace(/:/g, '.'),
+      data.ingredients,
+      data.action
+    );
+
+    result.done(
+      // success
+      function () {
+        console.log("Ingredients update done");
+        // Send back to all listeners
+        io.to(data.id).emit('ingredientsupdate', data);
+      },
+      // fail
+      function (err) {
+        console.log("Update error: ", err);
+        socket.emit('err:update', _.extend(data, { err: err }));
+      }
+    );
+  });
 });

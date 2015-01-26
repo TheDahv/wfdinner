@@ -63,7 +63,7 @@
             ng-repeat="meal in meals | filter:showMeal" >
             <h2>{{meal}}</h2>
 
-            <form action="" ng-controller="meal-controller">
+            <form name="mealForm" ng-show="plan" ng-controller="meal-controller">
               <p>
                 <md-input-group>
                   <label class="light">Meal Name</label>
@@ -80,8 +80,9 @@
                   <label class="light">Recipe URL</label>
                   <md-input class="long"
                     ng-model="mealUrl"
+                    ng-model-options="{ getterSetter: true }"
                     ng-blur="syncMealChange('url')"
-                    ng-model-options="{ getterSetter: true }">
+                    >
                   </md-input>
                 </md-input-group>
               </p>
@@ -91,10 +92,11 @@
                   <label for="{{day}}.{{meal}}.ingredients" class="light">
                     Ingredients
                   </label>
-                  <textarea type="text" name="{{day}}.{{meal}}.ingredients"
+                  <textarea type="text" name="ingredients"
                     rows="3"
                     ng-model="mealIngredients"
-                    ng-model-options="{ getterSetter: true }">
+                    ng-model-options="{ getterSetter: true }"
+                    ng-blur="syncIngredientsChange()">
                   </textarea>
                 </p>
               </md-input-container>

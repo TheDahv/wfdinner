@@ -1,12 +1,13 @@
 // The Plan module manages operations on meal plan objects
 
 // Dependencies
-var w = require('when');
+var w = require('when'),
+    _ = require('lodash');
 
 var planTemplate = {
   _id: '',
   'Monday': {
-    'Breakfast' : { name: 'Hello Monday Breakfast', url: '', ingredients: [] },
+    'Breakfast' : { name: 'Hello Monday Breakfast', url: '', ingredients: ['Hello'] },
     'Lunch'     : { name: '', url: '', ingredients: [] },
     'Dinner'    : { name: 'Tacos', url: '', ingredients: [] }
   },
@@ -116,7 +117,26 @@ exports.update = function (id, path, value, action) {
     for(i; i < pathUpdateParts.length; i++) {
       objectTemp = objectTemp[pathUpdateParts[i]];
     }
-    objectTemp = value;
+
+    if (action && _.isArray(value)) {
+      console.log("Data update");
+      console.log(action);
+      console.log(value);
+
+      // $push or $pull array values
+      if (action === 'add') {
+        value.forEach(function (item) {
+          objectTemp.push(item);
+        });
+      } else {
+        objectTemp = objectTemp.filter(function (item) {
+          return value.indexOf(item) >= 0;
+        });
+      }
+    } else {
+      // $set a value
+      objectTemp = value;
+    }
 
     deferred.resolve(planData);
   } catch (e) {
