@@ -3,6 +3,8 @@ var w           = require('when'),
     url = "mongodb://localhost:27017/wfd-dev";
 
 /**
+* @function run
+*
 * Given a database operation, manage database connections and perform the
 * operation for the client
 *
@@ -34,6 +36,19 @@ var run = function (cmd) {
   return deferred.promise;
 };
 
+/** DB Module
+ * @module data/db
+ *
+ * Abstracts away persistence operations. It exports classes to manage
+ * the various classes and models in the project
+ */
 var db = {};
-db.Plan = require('./mongo.plan.js')(run);
+
+/**
+ * Manages operations on the Plan model
+ *
+ * This particular setup uses the MongoDB implementation for the Plan model
+ * and exports its operations here
+ */
+db.Plan = require('./mongo.plan')(run);
 module.exports = db;
