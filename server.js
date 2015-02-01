@@ -14,7 +14,7 @@ app.get('/', function (req, res) {
 });
 
 app.post('/', function (req, res) {
-  var created = plan.create()
+  var created = plan.create();
   created.done(
     // success
     function (plan) {
@@ -23,7 +23,6 @@ app.post('/', function (req, res) {
     // failure
     function (err) {
       // TODO: Write plan creation error handler
-      console.error("Failed to create plan: ", err);
       res.redirect('/');
     }
   );
@@ -39,9 +38,16 @@ app.get('/plans/:id', function (req, res) {
   console.log("/plans/" + req.params.id);
   plan.get(req.params.id).done(
     // success
-    function (plan) { res.json(plan); },
+    function (p) { res.json(p); },
     // failure
-    function (e) { res.status(500).send({ "error": e }); }
+    function (e) {
+      var errorPayload = { "error": e.toString() };
+      if (/not found/.test(errorPayload.error)) {
+        res.status(404).send(errorPayload)
+      } else {
+        res.status(500).send(errorPayload);
+      }
+    }
   );
 });
 

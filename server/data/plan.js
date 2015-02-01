@@ -2,10 +2,10 @@
 
 // Dependencies
 var w = require('when'),
-    _ = require('lodash');
+    _ = require('lodash'),
+    Plan = require('./db').Plan;
 
 var planTemplate = {
-  _id: '',
   'Monday': {
     'Breakfast' : { name: 'Hello Monday Breakfast', url: '', ingredients: ['Hello'] },
     'Lunch'     : { name: '', url: '', ingredients: [] },
@@ -53,20 +53,7 @@ module.exports = exports = {};
 * Returns a promise for the resulting object,
 * or an error if the creation fails
 */
-exports.create = function () {
-  var planData,
-      deferred = w.defer();
-
-  try {
-    planData = Object.create(planTemplate);
-    planData._id = '1234';
-    deferred.resolve(planData);
-  } catch (e) {
-    deferred.reject(e);
-  }
-
-  return deferred.promise;
-};
+exports.create = function () { return Plan.insert(planTemplate); };
 
 /**
 * get
@@ -75,20 +62,7 @@ exports.create = function () {
 *
 * Returns a promise for the returned plan, or an error if the lookup fails
 */
-exports.get = function (id) {
-  var planData,
-      deferred = w.defer();
-
-  try {
-    planData = planTemplate;
-    planData._id = id;
-    deferred.resolve(planData);
-  } catch (e) {
-    deferred.reject(e);
-  }
-
-  return deferred.promise;
-};
+exports.get = Plan.findOne
 
 /**
 * update
