@@ -1,9 +1,10 @@
 // The Plan module manages operations on meal plan objects
 
 // Dependencies
-var w = require('when'),
-    _ = require('lodash'),
-    Plan = require('./db').Plan;
+var w                  = require('when'),
+    _                  = require('lodash'),
+    Plan               = require('./db').Plan,
+    knownUpdateActions = new RegExp(['add', 'remove', 'set'].join('|'));
 
 var planTemplate = {
   'Monday': {
@@ -76,27 +77,18 @@ exports.get = Plan.findOne
 * Returns a promise for the updated plan data, or an error if the update fails
 */
 exports.update = function (id, path, value, action) {
-  var operations;
+  // Default action to set
+  action = action || 'set';
 
-  if (action && _.isArray(value)) {
-    switch (action) {
-    case 'add':
-      operations = value.map(function (ingredient) {
-        return Plan.add(id, path, ingredient);
-      });
-      break;
-    case 'remove':
-      operations = value.map(function (ingredient) {
-        return Plan.remove(id, path, ingredient);
-      });
-      break;
-    default:
-      return w.reject(new Error("Unknown update action"));
-    }
-
-    return w.all(operations);
+  if (!knownUpdateActions.test(action)) {
+    return w.reject(new Error("Unknown update action " + action));
+  } else if (_.isArray(value)) {
+    return w.all(
+      value.map(function (ingredient) {
+        return Plan[action](id, path, ingredient);
+      })
+    );
   } else {
-    // $set a value
-    return Plan.update(id, path, value, action);
+    return Plan[action](id, path, value);
   }
 };

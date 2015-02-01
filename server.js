@@ -70,7 +70,12 @@ io.on('connection', function (socket) {
   });
 
   socket.on('mealchange', function (data) {
-    var result = plan.update(data.id, data.path.replace(/:/g, '.'), data.value);
+    var result = plan.update(
+      data.id,
+      data.path.replace(/:/g, '.'),
+      data.value
+    );
+
     result.done(
       // success
       function () {

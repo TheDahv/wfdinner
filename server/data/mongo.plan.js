@@ -26,7 +26,7 @@ module.exports = function (run) {
   * if there is a failure or the plan is not found
   *
   * @param {string} id The Plan Id
-  * @returns {Promise} A promise for the result of the database lookup
+  * @return {Promise} A promise for the result of the database lookup
   */
   ops.findOne = function (id) {
     return run(function (db) {
@@ -52,7 +52,7 @@ module.exports = function (run) {
   * the insertion fails
   *
   * @param {object} plan The plan data to insert into the database
-  * @returns {Promise} A promise for the successfully inserted plan or an insertion error
+  * @return {Promise} A promise for the successfully inserted plan or an insertion error
   */
   ops.insert = function (plan) {
     return run(function (db) {
@@ -70,7 +70,7 @@ module.exports = function (run) {
     });
   };
 
-  ops.update = function (id, path, value, action) {
+  ops.set = function (id, path, value) {
     return run(function (db) {
       var deferred = w.defer(),
           query    = { _id: new ObjectID(id) },
