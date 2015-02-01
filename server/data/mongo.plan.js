@@ -35,7 +35,7 @@ module.exports = function (run) {
       collection(db).findOne({ _id: new ObjectID(id) }, function (err, doc) {
         if (err) {
           return deferred.reject(err);
-        } else if (_.isEmpty(plan)) {
+        } else if (_.isEmpty(doc)) {
           return deferred.reject(new Error("Plan not found for ID " + id));
         } else {
           return deferred.resolve(doc);
