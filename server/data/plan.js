@@ -76,42 +76,27 @@ exports.get = Plan.findOne
 * Returns a promise for the updated plan data, or an error if the update fails
 */
 exports.update = function (id, path, value, action) {
-  var planData,
-      deferred = w.defer(),
-      pathUpdateParts = [],
-      i = 0,
-      objectTemp;
+  var operations;
 
-  try {
-    planData = Object.create(planTemplate);
-    planData._id = id;
-    objectTemp = planData;
-
-    pathUpdateParts = path.split('.');
-    for(i; i < pathUpdateParts.length; i++) {
-      objectTemp = objectTemp[pathUpdateParts[i]];
+  if (action && _.isArray(value)) {
+    switch (action) {
+    case 'add':
+      operations = value.map(function (ingredient) {
+        return Plan.add(id, path, ingredient);
+      });
+      break;
+    case 'remove':
+      operations = value.map(function (ingredient) {
+        return Plan.remove(id, path, ingredient);
+      });
+      break;
+    default:
+      return w.reject(new Error("Unknown update action"));
     }
 
-    if (action && _.isArray(value)) {
-      // $push or $pull array values
-      if (action === 'add') {
-        value.forEach(function (item) {
-          objectTemp.push(item);
-        });
-      } else {
-        objectTemp = objectTemp.filter(function (item) {
-          return value.indexOf(item) >= 0;
-        });
-      }
-    } else {
-      // $set a value
-      objectTemp = value;
-    }
-
-    deferred.resolve(planData);
-  } catch (e) {
-    deferred.reject(e);
+    return w.all(operations);
+  } else {
+    // $set a value
+    return Plan.update(id, path, value, action);
   }
-
-  return deferred.promise;
 };

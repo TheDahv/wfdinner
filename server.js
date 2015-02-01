@@ -3,7 +3,8 @@ var express = require('express'),
     app     = express(),
     sockets = require('socket.io'),
     io,
-    plan    = require('./server/data/plan');
+    plan    = require('./server/data/plan'),
+    w       = require('when');
 
 // Configure server and middleware
 app.use(express.static('./public'));

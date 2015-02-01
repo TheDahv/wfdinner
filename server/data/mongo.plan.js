@@ -70,5 +70,65 @@ module.exports = function (run) {
     });
   };
 
+  ops.update = function (id, path, value, action) {
+    return run(function (db) {
+      var deferred = w.defer(),
+          query    = { _id: new ObjectID(id) },
+          update   = { '$set': {} };
+
+      update['$set'][path] = value;
+
+      collection(db).update(query, update, function (err) {
+        if (err) {
+          return deferred.reject(err);
+        } else {
+          return deferred.resolve();
+        }
+      });
+
+      return deferred.promise;
+    });
+  };
+
+  ops.add = function (id, path, value) {
+    return run(function (db) {
+      var deferred = w.defer();
+          query    = { _id: new ObjectID(id) },
+          update   = { '$push': {} };
+
+      update['$push'][path] = value;
+
+      collection(db).update(query, update, function (err) {
+        if (err) {
+          return deferred.reject(err);
+        } else {
+          return deferred.resolve();
+        }
+      });
+
+      return deferred.promise;
+    });
+  };
+
+  ops.remove = function (id, path, value) {
+    return run(function (db) {
+      var deferred = w.defer(),
+          query    = { _id: new ObjectID(id) },
+          update   = { '$pull': {} };
+
+      update['$pull'][path] = value;
+
+      collection(db).update(query, update, function (err) {
+        if (err) {
+          return deferred.reject(err);
+        } else {
+          return deferred.resolve();
+        }
+      });
+
+      return deferred.promise;
+    });
+  };
+
   return ops;
 };
