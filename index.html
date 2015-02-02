@@ -12,20 +12,7 @@
   <title>What's For Dinner</title>
 
 </head>
-<body ng-controller="wfd-app">
-  <header layout="row" layout-align="start center">
-    <md-toolbar class="md-accent" layout="row">
-      <div class="md-toolbar-tools">
-        <h1 flex="75">What's For Dinner</h1>
-
-        <div class="options" flex="25">
-          <label for="">Options</label>
-          <a href="#options" class="btn options" ng-click="openOptions($event)"></a>
-        </div><!-- .options -->
-      </div>
-    </md-toolbar>
-
-  </header>
+<body ng-controller="wfd-app" layout="column" layout-fill>
   <md-sidenav class="md-sidenav-right md-whiteframe-z2" md-component-id="optionswindow">
     <md-toolbar>
       <h1 class="md-toolbar-tools">Options</h1>
@@ -54,56 +41,72 @@
     </md-content>
   </md-sidenav>
 
-  <div id="main">
-    <md-tabs md-selected=0 md-stretch-tabs="always">
-      <md-tab ng-repeat="day in days" label="{{day}}">
-        <div layout="column" layout-align="space-around center" class="day">
+  <div layout="column" layout-fill flex>
+    <md-toolbar class="md-accent" md-scroll-shrink>
+      <header layout="row">
+        <div class="md-toolbar-tools">
+          <h1 flex="75">What's For Dinner</h1>
 
-          <div class="meal {{meal}}" ng-repeat="meal in meals | filter:showMeal">
-            <h2>{{meal}}</h2>
+          <div class="options" flex="25">
+            <label for="">Options</label>
+            <a href="#options" class="btn options" ng-click="openOptions($event)"></a>
+          </div><!-- .options -->
+        </div>
+      </header>
+    </md-toolbar>
+    <md-content>
+    <div id="main">
+      <md-tabs md-selected=0 md-stretch-tabs="always">
+        <md-tab ng-repeat="day in days" label="{{day}}">
+          <div layout="column" layout-align="space-around center" class="day">
 
-            <form name="mealForm" ng-show="plan" ng-controller="meal-controller">
-              <md-input-container>
-                <label class="light">Meal Name</label>
-                <md-input class="long"
-                  ng-model="mealName"
-                  ng-blur="syncMealChange('name')"
-                  ng-model-options="{ getterSetter: true }">
-                </md-input>
-              </md-input-container>
+            <div class="meal {{meal}}" ng-repeat="meal in meals | filter:showMeal">
+              <h2>{{meal}}</h2>
 
-              <md-input-container>
-                <label class="light">Recipe URL</label>
-                <md-input class="long"
-                  ng-model="mealUrl"
-                  ng-model-options="{ getterSetter: true }"
-                  ng-blur="syncMealChange('url')"
-                  >
-                </md-input>
-              </md-input-container>
+              <form name="mealForm" ng-show="plan" ng-controller="meal-controller">
+                <md-input-container>
+                  <label class="light">Meal Name</label>
+                  <md-input class="long"
+                    ng-model="mealName"
+                    ng-blur="syncMealChange('name')"
+                    ng-model-options="{ getterSetter: true }">
+                  </md-input>
+                </md-input-container>
 
-              <md-input-container flex>
-                <label for="ingredients" class="light">
-                  Ingredients
-                </label>
-                <textarea type="text" name="ingredients"
-                  rows="3"
-                  ng-model="mealIngredients"
-                  ng-model-options="{ getterSetter: true }"
-                  ng-blur="syncIngredientsChange()">
-                </textarea>
-              </md-input-container>
-            </form><!-- form | meal-controller -->
+                <md-input-container>
+                  <label class="light">Recipe URL</label>
+                  <md-input class="long"
+                    ng-model="mealUrl"
+                    ng-model-options="{ getterSetter: true }"
+                    ng-blur="syncMealChange('url')"
+                    >
+                  </md-input>
+                </md-input-container>
 
-            <md-divider ng-if="!$last"></md-divider>
+                <md-input-container flex>
+                  <label for="ingredients" class="light">
+                    Ingredients
+                  </label>
+                  <textarea type="text" name="ingredients"
+                    rows="3"
+                    ng-model="mealIngredients"
+                    ng-model-options="{ getterSetter: true }"
+                    ng-blur="syncIngredientsChange()">
+                  </textarea>
+                </md-input-container>
+              </form><!-- form | meal-controller -->
 
-            <hr class="section-spacer">
+              <md-divider ng-if="!$last"></md-divider>
 
-          </div><!-- ng-repeat="meal in meals" .meal.{{meal}} -->
+              <hr class="section-spacer">
 
-        </div><!-- .day | day-controller -->
-      </md-tab><!-- ng-repeat="day in days" -->
-    </md-tabs>
-  </div><!-- #main -->
+            </div><!-- ng-repeat="meal in meals" .meal.{{meal}} -->
+
+          </div><!-- .day | day-controller -->
+        </md-tab><!-- ng-repeat="day in days" -->
+      </md-tabs>
+    </div><!-- #main -->
+    </md-content>
+  </div>
 </body>
 </html>
