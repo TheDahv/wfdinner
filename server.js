@@ -24,6 +24,7 @@ app.post('/', function (req, res) {
     // failure
     function (err) {
       // TODO: Write plan creation error handler
+      console.error(err);
       res.redirect('/');
     }
   );
@@ -43,6 +44,7 @@ app.get('/plans/:id', function (req, res) {
     // failure
     function (e) {
       var errorPayload = { "error": e.toString() };
+      console.error(e.toString());
       if (/not found/.test(errorPayload.error)) {
         res.status(404).send(errorPayload)
       } else {
@@ -84,7 +86,7 @@ io.on('connection', function (socket) {
       },
       // fail
       function (err) {
-        console.log("Update error: ", err);
+        console.error("Update error: ", err);
         socket.emit('err:update', _.extend(data, { err: err }));
       }
     );
@@ -106,7 +108,7 @@ io.on('connection', function (socket) {
       },
       // fail
       function (err) {
-        console.log("Update error: ", err);
+        console.error("Update error: ", err);
         socket.emit('err:update', _.extend(data, { err: err }));
       }
     );
