@@ -115,7 +115,6 @@ gulp.task('watch:images', function () {
 })
 
 gulp.task('build', [
-  'clean',
   'styles',
   'scripts',
   'move-source-maps',
