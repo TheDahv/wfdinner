@@ -2,6 +2,8 @@
 <html lang="en" ng-app="wfd">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+
   <link rel="stylesheet" href="/css/vendor.css">
   <link rel="stylesheet" href="/css/application.css">
   <script src="/socket.io/socket.io.js"></script>
@@ -9,7 +11,6 @@
   <script src="/js/application.js"></script>
   <title>What's For Dinner</title>
 
-  <meta name="viewport" content="initial-scale=1, maximum-scale=1">
 </head>
 <body ng-controller="wfd-app">
   <header layout="row" layout-align="start center">
@@ -54,51 +55,43 @@
   </md-sidenav>
 
   <div id="main">
-    <md-tabs md-selected="currentDay">
+    <md-tabs md-selected=0 md-stretch-tabs="always">
       <md-tab ng-repeat="day in days" label="{{day}}">
-        <div layout="column" layout-fill layout-align="space-around center"
-          class="day">
+        <div layout="column" layout-align="space-around center" class="day">
 
-          <div class="meal {{meal}}"
-            ng-repeat="meal in meals | filter:showMeal" >
+          <div class="meal {{meal}}" ng-repeat="meal in meals | filter:showMeal">
             <h2>{{meal}}</h2>
 
             <form name="mealForm" ng-show="plan" ng-controller="meal-controller">
-              <p>
-                <md-input-group>
-                  <label class="light">Meal Name</label>
-                  <md-input class="long"
-                    ng-model="mealName"
-                    ng-blur="syncMealChange('name')"
-                    ng-model-options="{ getterSetter: true }">
-                  </md-input>
-                </md-input-group>
-              </p>
+              <md-input-container>
+                <label class="light">Meal Name</label>
+                <md-input class="long"
+                  ng-model="mealName"
+                  ng-blur="syncMealChange('name')"
+                  ng-model-options="{ getterSetter: true }">
+                </md-input>
+              </md-input-container>
 
-              <p>
-                <md-input-group>
-                  <label class="light">Recipe URL</label>
-                  <md-input class="long"
-                    ng-model="mealUrl"
-                    ng-model-options="{ getterSetter: true }"
-                    ng-blur="syncMealChange('url')"
-                    >
-                  </md-input>
-                </md-input-group>
-              </p>
+              <md-input-container>
+                <label class="light">Recipe URL</label>
+                <md-input class="long"
+                  ng-model="mealUrl"
+                  ng-model-options="{ getterSetter: true }"
+                  ng-blur="syncMealChange('url')"
+                  >
+                </md-input>
+              </md-input-container>
 
               <md-input-container flex>
-                <p>
-                  <label for="{{day}}.{{meal}}.ingredients" class="light">
-                    Ingredients
-                  </label>
-                  <textarea type="text" name="ingredients"
-                    rows="3"
-                    ng-model="mealIngredients"
-                    ng-model-options="{ getterSetter: true }"
-                    ng-blur="syncIngredientsChange()">
-                  </textarea>
-                </p>
+                <label for="ingredients" class="light">
+                  Ingredients
+                </label>
+                <textarea type="text" name="ingredients"
+                  rows="3"
+                  ng-model="mealIngredients"
+                  ng-model-options="{ getterSetter: true }"
+                  ng-blur="syncIngredientsChange()">
+                </textarea>
               </md-input-container>
             </form><!-- form | meal-controller -->
 

@@ -12,3 +12,11 @@ hr.section-spacer {
   border: none;
   margin-bottom: 2em;
 }
+
+.meal {
+  width: 60%;
+
+  @media screen and (max-width: 960px) {
+    width: 100%;
+  }
+}
