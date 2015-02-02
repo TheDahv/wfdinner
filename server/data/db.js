@@ -2,6 +2,10 @@ var w           = require('when'),
     MongoClient = require('mongodb').MongoClient,
     url = "mongodb://localhost:27017/wfd-dev";
 
+if (process.env.NODE_ENV === 'production' && process.env.MONGOLAB_URI) {
+  url = process.env.MONGOLAB_URI;
+}
+
 /**
 * @function run
 *
