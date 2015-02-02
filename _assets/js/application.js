@@ -13,6 +13,13 @@ var getRoom = function () {
   return document.location.pathname.slice(1);
 };
 
+// Theme configuration
+wfd.config(function ($mdThemingProvider) {
+  $mdThemingProvider.theme('default')
+    .primaryColor('green')
+    .accentColor('blue');
+});
+
 // Socket factory
 wfd.factory('socket', function (socketFactory) {
   var socket = io.connect('/');
