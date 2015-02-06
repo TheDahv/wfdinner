@@ -9,7 +9,7 @@ if (process.env.NODE_ENV === 'production' && process.env.MONGOLAB_URI) {
 var appDBConn = null;
 var conns = MongoClient.connect(url, function (err, db) {
   if (err) {
-    console.error("Blow up the app on startup");
+    console.error("Blow up the app on startup", err.toString());
     process.exit("Failed to connect to db:", err.toString());
   } else {
     appDBConn = db;
