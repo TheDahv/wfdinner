@@ -4,43 +4,16 @@ var w                  = require('when'),
     Plan               = require('./db').Plan,
     knownUpdateActions = new RegExp(['add', 'remove', 'set'].join('|'));
 
-var planTemplate = {
-  'Monday': {
-    'Breakfast' : { name: 'Hello Monday Breakfast', url: '', ingredients: ['Hello'] },
-    'Lunch'     : { name: '', url: '', ingredients: [] },
-    'Dinner'    : { name: 'Tacos', url: '', ingredients: [] }
-  },
-  'Tuesday': {
-    'Breakfast' : { name: 'Pancakes', url: '', ingredients: [] },
-    'Lunch'     : { name: '', url: '', ingredients: [] },
-    'Dinner'    : { name: '', url: '', ingredients: [] }
-  },
-  'Wednesday': {
-    'Breakfast' : { name: '', url: '', ingredients: [] },
-    'Lunch'     : { name: '', url: '', ingredients: [] },
-    'Dinner'    : { name: '', url: '', ingredients: [] }
-  },
-  'Thursday': {
-    'Breakfast' : { name: '', url: '', ingredients: [] },
-    'Lunch'     : { name: '', url: '', ingredients: [] },
-    'Dinner'    : { name: '', url: '', ingredients: [] }
-  },
-  'Friday': {
-    'Breakfast' : { name: '', url: '', ingredients: [] },
-    'Lunch'     : { name: '', url: '', ingredients: [] },
-    'Dinner'    : { name: '', url: '', ingredients: [] }
-  },
-  'Saturday': {
-    'Breakfast' : { name: '', url: '', ingredients: [] },
-    'Lunch'     : { name: '', url: '', ingredients: [] },
-    'Dinner'    : { name: '', url: '', ingredients: [] }
-  },
-  'Sunday': {
-    'Breakfast' : { name: '', url: '', ingredients: [] },
-    'Lunch'     : { name: '', url: '', ingredients: [] },
-    'Dinner'    : { name: '', url: '', ingredients: [] }
-  }
-};
+var planTemplate = 
+  'Monday,Tuesday,Wednesday,Thursday,Friday,Saturday,Sunday'.split(',').reduce(
+    function (progress, day) {
+      progress[day] = ['Breakfast', 'Lunch', 'Dinner'].reduce(
+        function (mealObject, meal) {
+          mealObject[meal] = { name: '', url: '', ingredients: [] };
+          return mealObject;
+        }, {});
+      return progress;
+    }, {});
 
 /**
  * Plan module
