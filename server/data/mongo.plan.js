@@ -3,9 +3,8 @@ var w               = require('when'),
     // Useful for casting plan IDs to MongoIds for queries
     ObjectID        = require('mongodb').ObjectID,
     // The name of the collection/table this module represents
-    COLLECTION_NAME = 'plans',
     // Generates the Mongo collection for Plans
-    collection      = function (db) { return db.collection(COLLECTION_NAME); };
+    collection      = function (db) { return db.collection('plans'); };
 
 /**
 * Mongo/Plan Module
@@ -36,15 +35,17 @@ module.exports = function (run) {
     return run(function (db) {
       var deferred = w.defer();
 
-      collection(db).findOne({ _id: new ObjectID(id) }, function (err, doc) {
-        if (err) {
-          return deferred.reject(err);
-        } else if (_.isEmpty(doc)) {
-          return deferred.reject(new Error("Plan not found for ID " + id));
-        } else {
-          return deferred.resolve(doc);
-        }
-      });
+      collection(db)
+        .find({ _id: new ObjectID(id) })
+        .next(function (err, doc) {
+          if (doc) {
+            return deferred.resolve(doc);
+          } else if (err) {
+            return deferred.reject(err);
+          }else {
+            return deferred.reject(new Error("Plan not found for ID " + id));
+          }
+        });
 
       return deferred.promise;
     });
@@ -66,9 +67,9 @@ module.exports = function (run) {
 
       collection(db).insert(plan, function (err) {
         if (err) {
-          return deferred.reject(err);
+          deferred.reject(err);
         } else {
-          return deferred.resolve(plan);
+          deferred.resolve(plan);
         }
       });
 
