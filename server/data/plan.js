@@ -59,7 +59,9 @@ module.exports = exports = {};
 *
 * @return A promise for the resulting object, or an error if the creation fails
 */
-exports.create = function () { return Plan.insert(planTemplate); };
+exports.create = function () {
+  return Plan.insert(_.clone(planTemplate));
+};
 
 /**
 * @function get

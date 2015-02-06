@@ -6,6 +6,16 @@ if (process.env.NODE_ENV === 'production' && process.env.MONGOLAB_URI) {
   url = process.env.MONGOLAB_URI;
 }
 
+var appDBConn = null;
+var conns = MongoClient.connect(url, function (err, db) {
+  if (err) {
+    console.error("Blow up the app on startup");
+    process.exit("Failed to connect to db:", err.toString());
+  } else {
+    appDBConn = db;
+  }
+});
+
 /**
 * @function run
 *
@@ -19,23 +29,15 @@ if (process.env.NODE_ENV === 'production' && process.env.MONGOLAB_URI) {
 var run = function (cmd) {
   var deferred = w.defer();
 
-  // Open a database connection
-  MongoClient.connect(url, function (err, db) {
-    // Report database connection error through the promise chain
-    if (err) { return deferred.reject(err); }
-
-    return cmd(db)
-      // Ensure connection closes regardless of result outcome
-      .finally(function () { db.close(); })
-      // Consume and end promise chain for DB operation
-      // Reject or resolve outer promise with result of inner promise
-      .done(
-        // success
-        function (result) { deferred.resolve(result); },
-        // fail
-        function (err) { deferred.reject(err); }
-      );
-  });
+  cmd(appDBConn)
+    // Consume and end promise chain for DB operation
+    // Reject or resolve outer promise with result of inner promise
+    .done(
+      // success
+      function (result) { return deferred.resolve(result); },
+      // fail
+      function (err) { return deferred.reject(err); }
+    );
 
   return deferred.promise;
 };
