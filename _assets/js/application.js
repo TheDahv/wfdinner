@@ -239,4 +239,6 @@ wfd.controller('meal-controller', function ($scope, socket) {
 
 });
 
+wfd.controller('wfd-welcome', function () { });
+
 }(window.angular, window.io));

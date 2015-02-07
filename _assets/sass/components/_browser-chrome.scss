@@ -1,0 +1,44 @@
+.browserChrome {
+  width: 100%;
+  height: auto;
+
+  margin-top: 2em;
+  margin-bottom: 2em;
+
+  border-top: 1.5em #e6e6e6 solid;
+  border-top-left-radius: 0.5em;
+  border-top-right-radius: 0.5em;
+
+  box-shadow: 0 2px 2px #333;
+
+  position: relative;
+
+  $red: (position: 1%, color: red);
+  $yellow: (position: 2.5%, color: yellow);
+  $green: (position: 4%, color: green);
+  $buttons: $red, $yellow, $green;
+
+  @each $button in $buttons {
+    .chrome-button.#{map-get($button, color)} {
+      display: inline-block;
+      border-radius: 50%;
+      height: 0.5em;
+      width: 0.5em;
+      background-color: #{map-get($button, color)};
+
+      position: absolute;
+      top: -0.9em;
+      left: #{map-get($button, position)};
+    }
+  }
+
+  .content {
+    width: 100%;
+    height: auto;
+
+    img {
+      width: 100%;
+    }
+  }
+
+}
