@@ -35,10 +35,29 @@
   .content {
     width: 100%;
     height: auto;
+    position: relative;
 
     img {
       width: 100%;
     }
-  }
 
+    &:hover .overlay {
+      opacity: 0.8;
+    }
+    &:hover .overlay.isPlaying {
+      opacity: 0;
+      display: none;
+    }
+    .overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+
+      transition: opacity 0.3s ease-out;
+      opacity: 0;
+      background-color: #333333;
+    }
+  }
 }
