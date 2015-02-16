@@ -5,8 +5,11 @@ es          = require('event-stream'),
 concat      = require('gulp-concat'),
 sourcemaps  = require('gulp-sourcemaps'),
 sass        = require('gulp-sass'),
+// Check out https://github.com/coen-hyde/gulp-cog
+// if lack of source maps becomes a problem
+include     = require('gulp-include'),
 // Constants
-SCRIPTS_SRC = '_assets/js/**/*.js',
+SCRIPTS_SRC = '_assets/js/**/**.js',
 SASS_SRC    = '_assets/sass/**/*.scss',
 VENDOR_JS   = 'vendor/**/*.js',
 VENDOR_CSS  = 'vendor/**/*.css';
@@ -25,17 +28,6 @@ gulp.task('clean:images', function (cb) {
 
 gulp.task('clean', ['clean:scripts', 'clean:styles']);
 
-var buildScripts = function (scriptsGlob, name)  {
-  // Grab all project JavaScript sources
-  return gulp.src(scriptsGlob)
-    // Initialize source maps
-    .pipe(sourcemaps.init())
-    // Bring everything into one file
-    .pipe(concat(name))
-    // Write the result to javascripts folder
-    .pipe(gulp.dest('public/js'));
-};
-
 gulp.task('scripts:vendor', function () {
   var angularSources = [
     "angular", "angular-animate", "angular-aria", "angular-material"
@@ -43,7 +35,6 @@ gulp.task('scripts:vendor', function () {
     return "vendor/" + module + "/" + module + ".js";
   });
 
-  angularSources.unshift('vendor/hammerjs/hammer.min.js');
   angularSources.push('vendor/angular-socket-io/socket.min.js');
 
   return gulp.src(angularSources)
@@ -52,7 +43,9 @@ gulp.task('scripts:vendor', function () {
 });
 
 gulp.task('scripts:application', function () {
-  return buildScripts(SCRIPTS_SRC, 'application.js');
+  return gulp.src('_assets/js/application.js')
+    .pipe(include())
+    .pipe(gulp.dest('public/js'));
 });
 
 gulp.task('scripts', ['scripts:vendor', 'scripts:application']);

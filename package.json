@@ -25,5 +25,8 @@
     "event-stream": "3.2.1",
     "del": "1.1.1",
     "bson": "0.2.18"
+  },
+  "devDependencies": {
+    "gulp-include": "~1.1.1"
   }
 }
