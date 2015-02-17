@@ -8,6 +8,7 @@ sass        = require('gulp-sass'),
 // Check out https://github.com/coen-hyde/gulp-cog
 // if lack of source maps becomes a problem
 include     = require('gulp-include'),
+ngAnnotate  = require('gulp-ng-annotate'),
 // Constants
 SCRIPTS_SRC = '_assets/js/**/**.js',
 SASS_SRC    = '_assets/sass/**/*.scss',
@@ -45,6 +46,7 @@ gulp.task('scripts:vendor', function () {
 gulp.task('scripts:application', function () {
   return gulp.src('_assets/js/application.js')
     .pipe(include())
+    .pipe(ngAnnotate())
     .pipe(gulp.dest('public/js'));
 });
 
