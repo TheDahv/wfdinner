@@ -30,16 +30,8 @@ gulp.task('clean:images', function (cb) {
 gulp.task('clean', ['clean:scripts', 'clean:styles']);
 
 gulp.task('scripts:vendor', function () {
-  var angularSources = [
-    "angular", "angular-animate", "angular-aria", "angular-material"
-  ].map(function (module) {
-    return "vendor/" + module + "/" + module + ".js";
-  });
-
-  angularSources.push('vendor/angular-socket-io/socket.min.js');
-
-  return gulp.src(angularSources)
-    .pipe(concat('vendors.js'))
+  return gulp.src('_assets/js/vendors.js')
+    .pipe(include())
     .pipe(gulp.dest('public/js'));
 });
 
