@@ -21,7 +21,7 @@
     });
   };
 
-  angular.module('wfd').controller('meal-controller', function ($scope, socket) {
+  angular.module('wfd').controller('MealController', function ($scope, socket) {
     var makeAccessor = function (path) {
       return function (value) {
         if ($scope.plan) {

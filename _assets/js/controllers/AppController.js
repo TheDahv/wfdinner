@@ -6,7 +6,7 @@
     });
   };
 
-  angular.module('wfd').controller('wfd-app', function ($scope, $http, $mdSidenav, socket) {
+  angular.module('wfd').controller('AppController', function ($scope, $http, $mdSidenav, socket) {
     $scope.selectedDay = 'Monday';
     $scope.days = [
       'Monday',

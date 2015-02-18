@@ -1,5 +1,5 @@
 (function (angular) {
-  angular.module('wfd').controller('options-controller', function ($scope, $mdSidenav) {
+  angular.module('wfd').controller('OptionsController', function ($scope, $mdSidenav) {
     $scope.close = function () {
       $mdSidenav('optionswindow').close();
     };

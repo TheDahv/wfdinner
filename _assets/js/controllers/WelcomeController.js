@@ -1,5 +1,5 @@
 (function (angular) {
-  angular.module('wfd').controller('wfd-welcome', function ($scope) {
+  angular.module('wfd').controller('WelcomeController', function ($scope) {
     $scope.playDemo = function ($event) {
       $event.preventDefault();
       var demoWindow = welcomeForm.querySelector('.browserChrome .content');

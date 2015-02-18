@@ -25,12 +25,12 @@
   <title>What's For Dinner</title>
 
 </head>
-<body ng-controller="wfd-app" layout="column" layout-fill>
+<body ng-controller="AppController" layout="column" layout-fill>
   <md-sidenav class="md-sidenav-right md-whiteframe-z2" md-component-id="optionswindow">
     <md-toolbar>
       <h1 class="md-toolbar-tools">Options</h1>
     </md-toolbar>
-    <md-content ng-controller="options-controller" class="md-padding">
+    <md-content ng-controller="OptionsController" class="md-padding">
       <h2>Meals to Plan</h2>
 
       <md-checkbox ng-model="showBreakfast"
@@ -75,7 +75,7 @@
             <div class="meal {{meal}}" ng-repeat="meal in meals | filter:showMeal">
               <h2>{{meal}}</h2>
 
-              <form name="mealForm" ng-show="plan" ng-controller="meal-controller">
+              <form name="mealForm" ng-show="plan" ng-controller="MealController">
                 <md-input-container>
                   <label class="light">Meal Name</label>
                   <md-input class="long"
