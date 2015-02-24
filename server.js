@@ -11,7 +11,7 @@ app.use(express.static('./public'));
 
 // Configure routes
 app.get('/', function (req, res) {
-  require('fs').createReadStream('./welcome.html').pipe(res);
+  require('fs').createReadStream('./index.html').pipe(res);
 });
 
 app.post('/', function (req, res) {
@@ -19,7 +19,7 @@ app.post('/', function (req, res) {
   created.done(
     // success
     function (plan) {
-      res.redirect('/' + plan._id);
+      res.end(JSON.stringify(plan));
     },
     // failure
     function (err) {

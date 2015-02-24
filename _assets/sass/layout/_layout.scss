@@ -13,8 +13,9 @@ hr.section-spacer {
   margin-bottom: 2em;
 }
 
-.meal {
+.meal, #ingredientsChecklist {
   width: 60%;
+  margin: 0 auto;
 
   @media screen and (max-width: 960px) {
     width: 100%;

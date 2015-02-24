@@ -1,5 +1,5 @@
 (function (angular) {
-  angular.module('wfd').controller('WelcomeController', function ($scope) {
+  angular.module('wfd').controller('WelcomeController', function ($scope, $http, $location) {
     $scope.playDemo = function ($event) {
       $event.preventDefault();
       var demoWindow = welcomeForm.querySelector('.browserChrome .content');
@@ -15,6 +15,14 @@
         video.play();
         overlay.classList.add("isPlaying");
       };
+    };
+
+    $scope.createPlan = function () {
+      $http.post('/')
+        .success(function (response) {
+          console.log(response);
+          $location.path('/plans/' + response._id);
+        });
     };
   });
 }(window.angular));

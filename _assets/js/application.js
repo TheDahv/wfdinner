@@ -3,7 +3,7 @@
     return document.location.pathname.slice(1);
   };
 
-  var wfd = angular.module('wfd', ['ngMaterial', 'btford.socket-io']);
+  var wfd = angular.module('wfd', ['ngRoute', 'ngMaterial', 'btford.socket-io']);
 
   // Theme configuration
   wfd.config(function ($mdThemingProvider) {
@@ -12,14 +12,24 @@
       .accentColor('blue');
   });
 
-  // Socket factory
-  wfd.factory('socket', function (socketFactory) {
-    var socket = io.connect('/');
-    socket.emit('room:join', getRoom());
-
-    return socketFactory({
-      ioSocket: socket
-    });
+  // Configure routing
+  wfd.config(function ($routeProvider) {
+    $routeProvider
+      .when('/', {
+        templateUrl: '/partials/welcome.html',
+        controller: 'WelcomeController'
+      })
+      .when('/plans/:planId/ingredients', {
+        templateUrl: '/partials/ingredients.html',
+        controller: 'IngredientsController'
+      })
+      .when('/plans/:planId', {
+        templateUrl: '/partials/planner.html',
+        controller: 'AppController'
+      })
+      .otherwise({
+        redirectTo: '/'
+      });
   });
 
   // Expose in browser object or other modules to use

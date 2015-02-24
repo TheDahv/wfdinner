@@ -1,0 +1,68 @@
+<div layout-fill layout="column">
+
+  <md-toolbar class="md-primary md-hue-2 md-tall">
+    <div class="md-toolbar-tools" layout-align="center">
+      <h1 class="title">What's For Dinner</h1>
+    </div>
+  </md-toolbar>
+
+  <md-content layout="column" layout-fill layout-align="start center" class="md-primary md-hue-1" flex>
+    <div class="outer-container text-center">
+      <form action="/" method="POST" name="welcomeForm" ng-submit="createPlan()">
+        <p>
+          Wasted food. Wasted money. Wasted opportunities to treat your body better.<br>
+          What's For Dinner is a simple tool to help your friends and family plan meals together.
+        </p>
+
+        <p>
+          Simply start a plan, share the URL to your friends, and we'll keep everybody in sync as you go!
+        </p>
+
+        <md-button class="md-primary">Get Started!</md-button>
+
+        <div class="browserChrome">
+          <span class="chrome-button red"></span>
+          <span class="chrome-button yellow"></span>
+          <span class="chrome-button green"></span>
+
+          <div class="content">
+            <img src="/img/wfd-ui.png" alt="What's For Dinner Interface" />
+
+            <div class="overlay" layout="column" layout-align="center">
+              <md-button class="md-accent" ng-click="playDemo($event)">
+                Watch Demo
+              </md-button>
+            </div>
+          </div>
+        </div>
+
+        <h2>But There's More!</h2>
+        <p>
+          There's <em>always</em> more!
+        </p>
+        <p>
+          Once you're done, bring all your ingredients into one shopping list from
+          Options menu to print out or load up on your mobile device later.
+        </p>
+
+        <md-button class="md-primary">Get Started!</md-button>
+      </form>
+    </div>
+  </md-content>
+
+
+</div>
+
+<footer>
+  <p>
+    What's For Dinner was put together by
+    <a href="http://www.thedahv.com" target="_blank">David Pierce</a>
+    for his family and for fun!
+
+    <br>
+
+    You can find the project on
+    <a href="https://github.com/TheDahv/wfdinner" target="_blank">GitHub</a>
+    if you have any issues, questions, or suggestions.
+  </p>
+</footer>
