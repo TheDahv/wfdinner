@@ -19,6 +19,10 @@
         templateUrl: '/partials/welcome.html',
         controller: 'WelcomeController'
       })
+      .when('/plans/:planId/ingredients', {
+        templateUrl: '/partials/ingredients.html',
+        controller: 'IngredientsController'
+      })
       .when('/plans/:planId', {
         templateUrl: '/partials/planner.html',
         controller: 'AppController'
