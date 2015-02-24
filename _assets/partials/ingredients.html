@@ -1,0 +1,19 @@
+<div layout="column" layout-fill flex>
+  <md-toolbar md-scroll-shrink class="md-primary md-hue-2">
+    <header layout="row">
+      <div class="md-toolbar-tools">
+        <h1 flex="75">What's For Dinner</h1>
+      </div>
+    </header>
+  </md-toolbar>
+
+  <md-content>
+    <div id="ingredientsChecklist">
+      <h1>Shopping List</h1>
+
+      <md-checkbox ng-repeat="ingredient in ingredients" aria-label="{{ingredient}}">
+        {{ingredient}}
+      </md-checkbox>
+    </div>
+  </md-content>
+</div>

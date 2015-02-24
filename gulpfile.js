@@ -101,13 +101,22 @@ gulp.task('watch:images', function () {
   return gulp.watch('_assets/img/**', ['move-images']);
 })
 
+gulp.task('move-partials', function () {
+  return gulp.src('_assets/partials/**/*').pipe(gulp.dest('public/partials'));
+});
+
+gulp.task('watch:partials', function () {
+  return gulp.watch('_assets/partials/**/*', ['move-partials']);
+});
+
 gulp.task('build', [
   'styles',
   'scripts',
   'move-source-maps',
-  'move-images'
+  'move-images',
+  'move-partials'
 ]);
 
-gulp.task('watch', ['build', 'watch:scripts', 'watch:sass', 'watch:images'], function () {
+gulp.task('watch', ['build', 'watch:scripts', 'watch:sass', 'watch:images', 'watch:partials'], function () {
   console.log("Watching your project...");
 });

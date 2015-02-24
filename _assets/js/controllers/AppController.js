@@ -6,7 +6,19 @@
     });
   };
 
-  angular.module('wfd').controller('AppController', function ($scope, $http, $mdSidenav, socket) {
+  // Socket factory
+  angular.module('wfd').factory('socket', function (socketFactory) {
+    var socket = io.connect('/'),
+        hashParts = document.location.hash.split('/');
+
+    socket.emit('room:join', hashParts[hashParts.length - 1]);
+
+    return socketFactory({
+      ioSocket: socket
+    });
+  });
+
+  angular.module('wfd').controller('AppController', function ($scope, $routeParams, $http, $mdSidenav, socket) {
     $scope.selectedDay = 'Monday';
     $scope.days = [
       'Monday',
@@ -18,7 +30,7 @@
       'Sunday'
     ];
 
-    var planId = document.location.pathname.slice(1);
+    var planId = $routeParams.planId;
     // Empty plan ID. Send user back to start page
     if (!planId) {
       document.location.pathname = "/";

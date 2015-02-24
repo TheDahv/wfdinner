@@ -1,6 +1,6 @@
 (function (angular) {
-  var getRoom = function () {
-    return document.location.pathname.slice(1);
+  var getRoom = function (plan) {
+    return plan._id;
   };
 
   var syncMealChange = function (socket, id, path, value) {
@@ -63,7 +63,7 @@
 
     $scope.syncMealChange = function (path) {
       var value = $scope["meal" + path[0].toUpperCase() + path.slice(1)]();
-      syncMealChange(socket, getRoom(), [$scope.day, $scope.meal, path].join(':'), value);
+      syncMealChange(socket, getRoom($scope.plan), [$scope.day, $scope.meal, path].join(':'), value);
     };
 
     $scope.syncIngredientsChange = function () {
@@ -88,10 +88,10 @@
       removed = old.filter(notIn(newIngredients));
 
       if (added.length) {
-        syncIngredientsChange(socket, getRoom(), $scope.clientId, path, added, 'add');
+        syncIngredientsChange(socket, getRoom($scope.plan), $scope.clientId, path, added, 'add');
       }
       if (removed.length) {
-        syncIngredientsChange(socket, getRoom(), $scope.clientId, path, removed, 'remove');
+        syncIngredientsChange(socket, getRoom($scope.plan), $scope.clientId, path, removed, 'remove');
       }
 
       // Update last-known ingredients for next time this function runs
