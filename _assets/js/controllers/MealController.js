@@ -45,11 +45,18 @@
             .split(/,|\n|\r\n/)
             // Clean up any extra whitespace
             .map(function (ingredient) {
-              return ingredient.trim();
+              return {
+                name: ingredient.trim(),
+                checked: false
+              };
             });
         }
 
-        return $scope.plan[$scope.day][$scope.meal].ingredients.join('\n');
+        return $scope.plan[$scope.day][$scope.meal]
+          .ingredients.map(function (ingredient) {
+            return ingredient.name;
+          })
+          .join('\n');
       }
 
       return '';
@@ -58,7 +65,9 @@
     // Cache over last-known value (or, our init value on startup)
     // for use in determining which ingredients have been added or removed
     $scope.mealPromise.then(function () {
-      $scope.lastMealIngredients = $scope.plan[$scope.day][$scope.meal].ingredients;
+      $scope.lastMealIngredients = $scope.plan[$scope.day][$scope.meal]
+        .ingredients
+        .map(function (i) { return i.name; });
     });
 
     $scope.syncMealChange = function (path) {
@@ -84,8 +93,8 @@
       };
 
       old     = $scope.lastMealIngredients;
-      added   = newIngredients.filter(notIn(old));
-      removed = old.filter(notIn(newIngredients));
+      added   = newIngredients.filter(notIn(old)).map(function (i) { return { name: i, checked: false }; });
+      removed = old.filter(notIn(newIngredients)).map(function (i) { return { name: i }; });
 
       if (added.length) {
         syncIngredientsChange(socket, getRoom($scope.plan), $scope.clientId, path, added, 'add');

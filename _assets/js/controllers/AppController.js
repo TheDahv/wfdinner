@@ -103,7 +103,12 @@
           });
         } else {
           tmp.ingredients = tmp.ingredients.filter(function (item) {
-            return data.ingredients.indexOf(item) < 0;
+            // Make sure this existing item does not exist in our list of
+            // items to remove
+            // TODO: replace with `find` or something faster
+            return data.ingredients.filter(function (i) {
+              return i.name === item.name;
+            }).length === 0;
           });
         }
       });
