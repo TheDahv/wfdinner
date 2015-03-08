@@ -42,7 +42,7 @@
         if (angular.isDefined(value)) {
           $scope.plan[$scope.day][$scope.meal].ingredients = value
             // Break input into individual items by line breaks or commas
-            .split(/,|\n|\r\n/)
+            .split(/\n|\r\n/)
             // Clean up any extra whitespace
             .map(function (ingredient) {
               return {
