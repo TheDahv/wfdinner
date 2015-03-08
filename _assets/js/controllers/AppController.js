@@ -11,7 +11,11 @@
     var socket = io.connect('/'),
         hashParts = document.location.hash.split('/');
 
-    socket.emit('room:join', hashParts[hashParts.length - 1]);
+    if (/ingredients/.test(document.location)) {
+      socket.emit('room:join', hashParts[hashParts.length - 2]);
+    } else {
+      socket.emit('room:join', hashParts[hashParts.length - 1]);
+    }
 
     return socketFactory({
       ioSocket: socket
@@ -103,7 +107,12 @@
           });
         } else {
           tmp.ingredients = tmp.ingredients.filter(function (item) {
-            return data.ingredients.indexOf(item) < 0;
+            // Make sure this existing item does not exist in our list of
+            // items to remove
+            // TODO: replace with `find` or something faster
+            return data.ingredients.filter(function (i) {
+              return i.name === item.name;
+            }).length === 0;
           });
         }
       });

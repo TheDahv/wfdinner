@@ -113,4 +113,38 @@ io.on('connection', function (socket) {
       }
     );
   });
+
+  socket.on('ingredientcheck', function (ingredient) {
+    var ingredientPathParts = ingredient.id.split('-'),
+        query = {},
+        update = {},
+        queryPath = "",
+        updatePath = "";
+
+    queryPath = ingredientPathParts
+      .slice(0, ingredientPathParts.length - 1)
+      .join('.') + '.ingredients.name';
+    query._id = ingredient.planId;
+    query[queryPath] = ingredient.name;
+
+    updatePath = ingredientPathParts
+      .slice(0, ingredientPathParts.length - 1)
+      .join('.') + '.ingredients.$.checked';
+    update[updatePath] = ingredient.checked;
+
+    var result = plan.setEntryField(query, {'$set': update});
+
+    result.done(
+      // success
+      function () {
+        // Send back to all listeners
+        io.to(ingredient.planId).emit('ingredientcheck:update', ingredient);
+      },
+      // fail
+      function (err) {
+        console.error("Update error: ", err);
+        socket.emit('err:update', _.extend(ingredient, { err: err }));
+      }
+    );
+  });
 });

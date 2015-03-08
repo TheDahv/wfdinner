@@ -4,7 +4,7 @@ var w                  = require('when'),
     Plan               = require('./db').Plan,
     knownUpdateActions = new RegExp(['add', 'remove', 'set'].join('|'));
 
-var planTemplate = 
+var planTemplate =
   'Monday,Tuesday,Wednesday,Thursday,Friday,Saturday,Sunday'.split(',').reduce(
     function (progress, day) {
       progress[day] = ['Breakfast', 'Lunch', 'Dinner'].reduce(
@@ -81,4 +81,8 @@ exports.update = function (id, path, value, action) {
   } else {
     return Plan[action](id, path, value);
   }
+};
+
+exports.setEntryField = function (query, value) {
+  return Plan.setEntryField(query, value);
 };

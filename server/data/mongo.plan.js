@@ -152,11 +152,33 @@ module.exports = function (run) {
    */
   ops.remove = function (id, path, value) {
     return run(function (db) {
-      var deferred = w.defer(),
-          query    = { _id: new ObjectID(id) },
-          update   = { '$pull': {} };
+      var deferred  = w.defer(),
+          query     = { _id: new ObjectID(id) },
+          update    = { '$pull': {} },
+          pullQuery = {};
 
-      update['$pull'][path] = value;
+      pullQuery[path] = value;
+      update['$pull'] = pullQuery;
+
+      collection(db).update(query, update, function (err) {
+        if (err) {
+          return deferred.reject(err);
+        } else {
+          return deferred.resolve();
+        }
+      });
+
+      return deferred.promise;
+    });
+  };
+
+  ops.setEntryField = function (query, update) {
+    return run(function (db) {
+      var deferred = w.defer();
+
+      if (query._id) {
+        query._id = new ObjectID(query._id);
+      }
 
       collection(db).update(query, update, function (err) {
         if (err) {

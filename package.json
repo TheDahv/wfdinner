@@ -2,6 +2,9 @@
   "name": "wfd",
   "version": "0.0.0",
   "description": "What's For Dinner web app v2",
+  "engines": {
+    "node": "0.10.35"
+  },
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
