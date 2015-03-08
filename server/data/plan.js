@@ -82,3 +82,7 @@ exports.update = function (id, path, value, action) {
     return Plan[action](id, path, value);
   }
 };
+
+exports.setEntryField = function (query, value) {
+  return Plan.setEntryField(query, value);
+};

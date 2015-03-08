@@ -11,7 +11,11 @@
     var socket = io.connect('/'),
         hashParts = document.location.hash.split('/');
 
-    socket.emit('room:join', hashParts[hashParts.length - 1]);
+    if (/ingredients/.test(document.location)) {
+      socket.emit('room:join', hashParts[hashParts.length - 2]);
+    } else {
+      socket.emit('room:join', hashParts[hashParts.length - 1]);
+    }
 
     return socketFactory({
       ioSocket: socket

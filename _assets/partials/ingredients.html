@@ -11,8 +11,11 @@
     <div id="ingredientsChecklist">
       <h1>Shopping List</h1>
 
-      <md-checkbox ng-repeat="ingredient in ingredients" aria-label="{{ingredient}}">
-        {{ingredient}}
+      <md-checkbox ng-repeat="ingredient in ingredients"
+        ng-model="ingredient.checked"
+        ng-change="changeIngredientState(ingredient)"
+        aria-label="{{ingredient.name}}">
+        {{ingredient.name}}
       </md-checkbox>
     </div>
   </md-content>
